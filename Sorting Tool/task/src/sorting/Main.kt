@@ -7,21 +7,82 @@ import kotlin.math.roundToInt
 enum class DataType(val id: Int) {
     LONG(1),
     LINE(2),
-    WORD(4);
+    WORD(4),
+    NULLDATA(0);
 }
 
 enum class ProcessType(val id: Int) {
     SUMMARY(8),
     NATURAL(16),
-    BYCOUNT(32);
+    BYCOUNT(32),
+    NULLPROCESS(0);
 }
+
+class InValidArgumentOptionException(message: String): Exception(message)
 
 fun main(args: Array<String>) {
 
     val scanner = Scanner(System.`in`)
-    val choices = parseInput(args)
-    process(choices, scanner)
+    try {
+        val validArgs = collect(args)
+        val choices = parseInput(validArgs)
+        process(choices, scanner)
+    } catch (e: InValidArgumentOptionException) {
+        println(e.message)
+    }
+}
 
+fun collect(args: Array<String>): MutableMap<String, String> {
+    val valid = mutableMapOf<String, String>()
+    val validDataOptions = arrayOf("long", "line", "word")
+    val validSortingOptions = arrayOf("natural", "byCount")
+    for (arg in args) {
+        when (arg) {
+            "-dataType" -> {
+                val idx = args.indexOf("-dataType") + 1
+                valid[arg] = if (idx < args.size && args[idx] in validDataOptions)
+                    args[idx].toUpperCase()
+                else throw InValidArgumentOptionException("No data type defined!")
+            }
+            "-sortingType" -> {
+                val idx = args.indexOf("-sortingType") + 1
+                valid[arg] = if (idx < args.size && args[idx] in validSortingOptions)
+                    args[idx].toUpperCase()
+                else throw InValidArgumentOptionException("No sorting type defined!")
+            }
+            in validDataOptions -> {
+            }
+            in validSortingOptions -> {
+            }
+            else -> println("$arg is not a valid parameter. It will be skipped.")
+        }
+    }
+    if (valid.size == 1) {
+        if (!valid.containsKey("-dataType")) valid["-dataType"] = "LONG"
+        else if (!valid.containsKey("-sortingType")) valid["-sortingType"] = "NATURAL"
+    }
+    return valid
+}
+
+fun parseInput(args: MutableMap<String, String>): Int {
+
+    var choice = 0
+    val dataType = DataType.valueOf(args["-dataType"].toString())
+    choice += when (dataType) {
+        LONG -> LONG.id
+        LINE -> LINE.id
+        WORD -> WORD.id
+        else -> NULLDATA.id
+    }
+
+    choice += when (ProcessType.valueOf(args["-sortingType"].toString())) {
+        ProcessType.NATURAL -> ProcessType.NATURAL.id
+        ProcessType.BYCOUNT -> ProcessType.BYCOUNT.id
+        ProcessType.SUMMARY -> ProcessType.SUMMARY.id
+        else -> ProcessType.NULLPROCESS.id
+    }
+
+    return choice
 }
 
 fun process(choices: Int, scanner: Scanner) {
@@ -62,45 +123,25 @@ fun process(choices: Int, scanner: Scanner) {
 
 }
 
-fun parseInput(args: Array<String>): Int {
-//    if (args.contains("-sortIntegers")) {
-//        val (x, y, z, data) = readNumbers(scanner)
-//        println("Total numbers: $x.")
-//        println("Sorted data: ${data.sorted().joinToString(" ")}")
-//        return
-//    }
-    var choice = 0
-    choice += if (args.contains("-sortingType") &&
-        args.indexOf("-sortingType") + 1 < args.size
-    ) {
-        val idx: Int = args.indexOf("-sortingType") + 1
-        when (ProcessType.valueOf(args[idx].toUpperCase())) {
-            ProcessType.NATURAL -> ProcessType.NATURAL.id
-            ProcessType.BYCOUNT -> ProcessType.BYCOUNT.id
-            ProcessType.SUMMARY -> ProcessType.SUMMARY.id
-        }
-    } else
-        ProcessType.NATURAL.id
-
-    choice += if (args.contains("-dataType") &&
-        args.indexOf("-dataType") + 1 < args.size
-    ) {
-        val idx: Int = args.indexOf("-dataType") + 1
-        when (valueOf(args[idx].toUpperCase())) {
-            LONG -> LONG.id
-            LINE -> LINE.id
-            WORD -> WORD.id
-        }
-    } else
-        LONG.id
-
-    return choice
-}
-
 fun readNumbers(scanner: Scanner): MutableList<Long> {
     val input = mutableListOf<Long>()
-    while (scanner.hasNextInt()) {
-        input.add(scanner.nextLong())
+//    while (scanner.hasNextInt()) {
+//        input.add(scanner.nextLong())
+//    }
+    while (scanner.hasNextLine()) {
+        val line = scanner.nextLine()
+        val temp = line.split(Regex("""\s+""")).toTypedArray()
+        for (token in temp) {
+            try {
+                input.add(token.toLong())
+            } catch (e: Exception) {
+                println(
+                    """
+                    "$token" is not a long. It will be skipped.
+                """.trimIndent()
+                )
+            }
+        }
     }
     return input
 }
@@ -161,6 +202,7 @@ fun <T : Comparable<T>> sortNatural(
     sep: String
 ) {
     println("Total $element: ${input.count()}.")
+    print("Sorted data: ")
     println(input.sorted().joinToString(sep))
 }
 
