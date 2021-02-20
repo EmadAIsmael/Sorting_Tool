@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sorting_Tool.iml" filepath="$PROJECT_DIR$/.idea/modules/Sorting_Tool.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Problems/Exchange/Sorting_Tool.Problems-Exchange.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.iml" filepath="$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.main.iml" filepath="$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.test.iml" filepath="$PROJECT_DIR$/.idea/modules/Sorting Tool/task/Sorting_Tool.Sorting_Tool-task.test.iml" />
